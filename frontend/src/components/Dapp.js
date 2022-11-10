@@ -76,6 +76,7 @@ export class Dapp extends React.Component {
       return (
         <ConnectWallet
           connectWallet={() => this._connectWallet()}
+          connectGoogle={(token) => this._connectGoogle(token)}
           networkError={this.state.networkError}
           dismiss={() => this._dismissNetworkError()}
         />
@@ -188,6 +189,9 @@ export class Dapp extends React.Component {
       this._stopPollingData();
       this._resetState();
     });
+  }
+
+  async _connectGoogle(token) {
   }
 
   _initialize(userAddress) {
