@@ -2,6 +2,7 @@ import React from "react";
 
 // We'll use ethers to interact with the Ethereum network and our contract
 import { ethers } from "ethers";
+import * as zd from 'zerodev';
 
 // We import the contract's artifacts and address here, as we are going to be
 // using them with ethers
@@ -163,12 +164,16 @@ export class Dapp extends React.Component {
 
     // Once we have the address, we can initialize the application.
 
+    // We first initialize ethers by creating a provider using window.ethereum
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const wallet = provider.getSigner(0);
+
     // First we check the network
     if (!this._checkNetwork()) {
       return;
     }
 
-    this._initialize(selectedAddress);
+    this._initialize(wallet);
 
     // We reinitialize it whenever the user changes their account.
     window.ethereum.on("accountsChanged", ([newAddress]) => {
@@ -181,7 +186,8 @@ export class Dapp extends React.Component {
         return this._resetState();
       }
 
-      this._initialize(newAddress);
+      const wallet = provider.getSigner(0);
+      this._initialize(wallet);
     });
 
     // We reset the dapp state if the network is changed
@@ -192,10 +198,17 @@ export class Dapp extends React.Component {
   }
 
   async _connectGoogle(token) {
+    const wallet = await zd.getWallet({
+      projectId: "insert your project ID",
+      identity: "google",
+      token: token,
+    });
+    this._initialize(wallet);
   }
 
-  _initialize(userAddress) {
-    // This method initializes the dapp
+  async _initialize(wallet) {
+    // This method initializes the dapp with the given wallet
+    const userAddress = await wallet.getAddress()
 
     // We first store the user's address in the component's state
     this.setState({
@@ -207,21 +220,18 @@ export class Dapp extends React.Component {
 
     // Fetching the token data and the user's balance are specific to this
     // sample project, but you can reuse the same initialization pattern.
-    this._initializeEthers();
+    this._initializeEthers(wallet);
     this._getTokenData();
     this._startPollingData();
   }
 
-  async _initializeEthers() {
-    // We first initialize ethers by creating a provider using window.ethereum
-    this._provider = new ethers.providers.Web3Provider(window.ethereum);
-
-    // Then, we initialize the contract using that provider and the token's
+  async _initializeEthers(wallet) {
+    // We initialize the contract using the wallet and the token's
     // artifact. You can do this same thing with your contracts.
     this._token = new ethers.Contract(
       contractAddress.Token,
       TokenArtifact.abi,
-      this._provider.getSigner(0)
+      wallet,
     );
   }
 
