@@ -77,7 +77,7 @@ export class Dapp extends React.Component {
       return (
         <ConnectWallet
           connectWallet={() => this._connectWallet()}
-          connectGoogle={(token) => this._connectGoogle(token)}
+          // connectGoogle={(token) => this._connectGoogle(token)}
           networkError={this.state.networkError}
           dismiss={() => this._dismissNetworkError()}
         />
@@ -198,12 +198,12 @@ export class Dapp extends React.Component {
   }
 
   async _connectGoogle(token) {
-    const wallet = await zd.getWallet({
-      projectId: "insert your project ID here",
-      identity: "google",
-      token: token,
-    });
-    this._initialize(wallet);
+    // const wallet = await zd.getWallet({
+    //   projectId: "insert your project ID here",
+    //   identity: "google",
+    //   token: token,
+    // });
+    // this._initialize(wallet);
   }
 
   async _initialize(wallet) {
