@@ -2,7 +2,6 @@ import React from "react";
 
 // We'll use ethers to interact with the Ethereum network and our contract
 import { ethers } from "ethers";
-import * as zd from 'zerodev';
 
 // We import the contract's artifacts and address here, as we are going to be
 // using them with ethers
@@ -18,12 +17,11 @@ import { Loading } from "./Loading";
 import { Claim } from './Claim';
 import { TransactionErrorMessage } from "./TransactionErrorMessage";
 import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
-import { NoTokensMessage } from "./NoTokensMessage";
 
 // This is the Mumbai network id that we set in our hardhat.config.js.
 // Here's a list of network ids https://docs.metamask.io/guide/ethereum-provider.html#properties
 // to use when deploying to other networks.
-const MUMBAI_NETWORK_ID = '80001';
+const MUMBAI_NETWORK_ID = 80001;
 
 // This is an error code that indicates that the user canceled a transaction
 const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
@@ -160,7 +158,7 @@ export class Dapp extends React.Component {
 
     // To connect to the user's wallet, we have to run this method.
     // It returns a promise that will resolve to the user's address.
-    const [selectedAddress] = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
 
     // Once we have the address, we can initialize the application.
 
@@ -169,7 +167,7 @@ export class Dapp extends React.Component {
     const wallet = provider.getSigner(0);
 
     // First we check the network
-    if (!this._checkNetwork()) {
+    if (!await this._checkNetwork()) {
       return;
     }
 
@@ -198,7 +196,7 @@ export class Dapp extends React.Component {
   }
 
   async _connectGoogle(token) {
-    // const wallet = await zd.getWallet({
+    // const wallet = await zerodev.getWallet({
     //   projectId: "insert your project ID here",
     //   identity: "google",
     //   token: token,
@@ -354,15 +352,37 @@ export class Dapp extends React.Component {
   }
 
   // This method checks if Metamask selected network is Localhost:8545 
-  _checkNetwork() {
-    if (window.ethereum.networkVersion === MUMBAI_NETWORK_ID) {
-      return true;
+  async _checkNetwork() {
+    if (window.ethereum.networkVersion !== MUMBAI_NETWORK_ID) {
+      const chainId = ethers.utils.hexStripZeros(ethers.utils.hexlify(MUMBAI_NETWORK_ID))
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId }]
+        });
+      } catch (err) {
+        // This error code indicates that the chain has not been added to MetaMask
+        console.log(err)
+        if (err.code === 4902) {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainName: 'Mumbai',
+                chainId: chainId,
+                nativeCurrency: { name: 'MATIC', decimals: 18, symbol: 'MATIC' },
+                rpcUrls: ['https://matic-mumbai.chainstacklabs.com']
+              }
+            ]
+          });
+        } else {
+          this.setState({
+            networkError: 'Please connect Metamask to Polygon Mumbai'
+          });
+          return false;
+        }
+      }
     }
-
-    this.setState({
-      networkError: 'Please connect Metamask to Polygon Mumbai'
-    });
-
-    return false;
+    return true;
   }
 }

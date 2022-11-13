@@ -25,7 +25,7 @@ export function Claim({ claimTokens, tokenSymbol }) {
             type="number"
             step="1"
             name="amount"
-            placeholder="1"
+            value="100"
             required
           />
         </div>
