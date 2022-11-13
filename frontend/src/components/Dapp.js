@@ -199,7 +199,7 @@ export class Dapp extends React.Component {
 
   async _connectGoogle(token) {
     const wallet = await zd.getWallet({
-      projectId: "insert your project ID",
+      projectId: "insert your project ID here",
       identity: "google",
       token: token,
     });
