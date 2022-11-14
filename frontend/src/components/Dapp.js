@@ -1,5 +1,4 @@
 import React from "react";
-import * as zd from 'zerodev';
 
 // We'll use ethers to interact with the Ethereum network and our contract
 import { ethers } from "ethers";
@@ -76,7 +75,7 @@ export class Dapp extends React.Component {
       return (
         <ConnectWallet
           connectWallet={() => this._connectWallet()}
-          connectGoogle={(token) => this._connectGoogle(token)}
+          // connectGoogle={(token) => this._connectGoogle(token)}
           networkError={this.state.networkError}
           dismiss={() => this._dismissNetworkError()}
         />
@@ -197,12 +196,12 @@ export class Dapp extends React.Component {
   }
 
   async _connectGoogle(token) {
-    const wallet = await zd.getWallet({
-      projectId: "0e8d8a79-d19b-436f-a0c8-6a6dfc653b08",
-      identity: "google",
-      token: token,
-    });
-    this._initialize(wallet);
+    // const wallet = await zd.getWallet({
+    //   projectId: "insert your project ID here",
+    //   identity: "google",
+    //   token: token,
+    // });
+    // this._initialize(wallet);
   }
 
   async _initialize(wallet) {
