@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 import { NetworkErrorMessage } from "./NetworkErrorMessage";
+import "./Loading.css";
 
 export function ConnectWallet({
   connectWallet,
@@ -9,7 +10,7 @@ export function ConnectWallet({
   networkError,
   dismiss,
 }) {
-  const [connecting, setConnecting] = useState(false)
+  const [connecting, setConnecting] = useState(false);
   return (
     <div className="container">
       <div className="row justify-content-md-center">
@@ -40,7 +41,7 @@ export function ConnectWallet({
               <GoogleOAuthProvider clientId="225383676269-snak87ndq8a6clk2t7vjo9ti4pufmobh.apps.googleusercontent.com">
                 <GoogleLogin
                   onSuccess={({ credential }) => {
-                    setConnecting(true)
+                    setConnecting(true);
                     connectGoogle(credential);
                   }}
                   onError={() => {
@@ -48,7 +49,17 @@ export function ConnectWallet({
                   }}
                 />
               </GoogleOAuthProvider>
-              {connecting && 'loader'}
+              {connecting && (
+                <div class="loader">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              )}
             </div>
           )}
         </div>
