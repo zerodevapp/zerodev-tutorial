@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 import { NetworkErrorMessage } from "./NetworkErrorMessage";
@@ -9,6 +9,7 @@ export function ConnectWallet({
   networkError,
   dismiss,
 }) {
+  const [connecting, setConnecting] = useState(false)
   return (
     <div className="container">
       <div className="row justify-content-md-center">
@@ -39,6 +40,7 @@ export function ConnectWallet({
               <GoogleOAuthProvider clientId="225383676269-snak87ndq8a6clk2t7vjo9ti4pufmobh.apps.googleusercontent.com">
                 <GoogleLogin
                   onSuccess={({ credential }) => {
+                    setConnecting(true)
                     connectGoogle(credential);
                   }}
                   onError={() => {
@@ -46,6 +48,7 @@ export function ConnectWallet({
                   }}
                 />
               </GoogleOAuthProvider>
+              {connecting && 'loader'}
             </div>
           )}
         </div>
