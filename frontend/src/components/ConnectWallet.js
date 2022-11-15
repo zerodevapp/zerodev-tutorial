@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 import { NetworkErrorMessage } from "./NetworkErrorMessage";
-import "./Loading.css";
 
 export function ConnectWallet({
   connectWallet,
@@ -50,14 +49,8 @@ export function ConnectWallet({
                 />
               </GoogleOAuthProvider>
               {connecting && (
-                <div class="loader">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
+                <div class="spinner-border" role="status">
+                  <span class="sr-only">Loading...</span>
                 </div>
               )}
             </div>

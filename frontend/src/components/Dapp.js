@@ -52,6 +52,7 @@ export class Dapp extends React.Component {
       txBeingSent: undefined,
       transactionError: undefined,
       networkError: undefined,
+      claiming: false,
     };
 
     this.state = this.initialState;
@@ -135,6 +136,7 @@ export class Dapp extends React.Component {
         <div className="row">
           <div className="col-12">
             <Claim
+              claiming={this.state.claiming}
               claimTokens={(amount) =>
                 this._claimTokens(amount)
               }
@@ -270,6 +272,7 @@ export class Dapp extends React.Component {
   // While this action is specific to this application, it illustrates how to
   // send a transaction.
   async _claimTokens(amount) {
+    this.setState({ claiming: true })
     // Sending a transaction is a complex operation:
     //   - The user can reject it
     //   - It can fail before reaching the ethereum network (i.e. if the user
@@ -323,6 +326,7 @@ export class Dapp extends React.Component {
       // If we leave the try/catch, we aren't sending a tx anymore, so we clear
       // this part of the state.
       this.setState({ txBeingSent: undefined });
+      this.setState({ claiming: false })
     }
   }
 

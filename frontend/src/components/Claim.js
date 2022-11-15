@@ -1,6 +1,6 @@
 import React from "react"
 
-export function Claim({ claimTokens, tokenSymbol }) {
+export function Claim({ claiming, claimTokens, tokenSymbol }) {
   return (
     <div>
       <h4>Claim</h4>
@@ -30,7 +30,14 @@ export function Claim({ claimTokens, tokenSymbol }) {
           />
         </div>
         <div className="form-group">
-          <input className="btn btn-primary" type="submit" value="Claim" />
+          {
+            claiming ?
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              :
+              <input className="btn btn-primary" type="submit" value="Claim" />
+          }
         </div>
       </form>
     </div>
