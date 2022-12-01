@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 export function Claim({ claiming, claimTokens, tokenSymbol }) {
   return (
@@ -8,13 +8,13 @@ export function Claim({ claiming, claimTokens, tokenSymbol }) {
         onSubmit={(event) => {
           // This function just calls the transferTokens callback with the
           // form's data.
-          event.preventDefault()
+          event.preventDefault();
 
-          const formData = new FormData(event.target)
-          const amount = formData.get("amount")
+          const formData = new FormData(event.target);
+          const amount = formData.get("amount");
 
           if (amount) {
-            claimTokens(amount)
+            claimTokens(amount);
           }
         }}
       >
@@ -23,23 +23,22 @@ export function Claim({ claiming, claimTokens, tokenSymbol }) {
           <input
             className="form-control"
             type="number"
-            step="1"
             name="amount"
             value="100"
             required
+            readOnly
           />
         </div>
         <div className="form-group">
-          {
-            claiming ?
-              <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-              </div>
-              :
-              <input className="btn btn-primary" type="submit" value="Claim" />
-          }
+          {claiming ? (
+            <div className="spinner-border" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          ) : (
+            <input className="btn btn-primary" type="submit" value="Claim" />
+          )}
         </div>
       </form>
     </div>
-  )
+  );
 }

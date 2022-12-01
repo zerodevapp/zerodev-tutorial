@@ -37,21 +37,22 @@ export function ConnectWallet({
                 justifyContent: "center",
               }}
             >
-              <GoogleOAuthProvider clientId="225383676269-snak87ndq8a6clk2t7vjo9ti4pufmobh.apps.googleusercontent.com">
-                <GoogleLogin
-                  onSuccess={({ credential }) => {
-                    setConnecting(true);
-                    connectGoogle(credential);
-                  }}
-                  onError={() => {
-                    console.log("Login Failed");
-                  }}
-                />
-              </GoogleOAuthProvider>
-              {connecting && (
-                <div class="spinner-border" role="status">
-                  <span class="sr-only">Loading...</span>
+              {connecting ? (
+                <div className="spinner-border" role="status">
+                  <span className="sr-only">Loading...</span>
                 </div>
+              ) : (
+                <GoogleOAuthProvider clientId="225383676269-snak87ndq8a6clk2t7vjo9ti4pufmobh.apps.googleusercontent.com">
+                  <GoogleLogin
+                    onSuccess={({ credential }) => {
+                      setConnecting(true);
+                      connectGoogle(credential);
+                    }}
+                    onError={() => {
+                      console.log("Login Failed");
+                    }}
+                  />
+                </GoogleOAuthProvider>
               )}
             </div>
           )}
